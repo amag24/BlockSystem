@@ -1,20 +1,24 @@
-
-modes = {
-    "VACANT",   #There is no train in this block
-    "ENTERING", #I'm still considered empty, but I should start moving to help train in previous block depart
-    "APPROACHING", #Previous block is now empty, I own the train and am waiting to sense it
-    "HOLDING", #I can sense the train and the next block is occupied
-    "DEPARTING", #I can see the train and the next block is free
-    "UNKNOWN" #Initial state. Defaults to holding behavior
-   }
+import time
+#modes = {
+#    "VACANT",   #There is no train in this block
+#    "ENTERING", #I'm still considered empty, but I should start moving to help train in previous block depart
+#    "APPROACHING", #Previous block is now empty, I own the train and am waiting to sense it
+#    "HOLDING", #I can sense the train and the next block is occupied
+#    "DEPARTING", #I can see the train and the next block is free
+#    "UNKNOWN" #Initial state. Defaults to holding behavior
+#   }
 
 #Accepts a list of blocks (optimally in reverse order)
 def autoRun(coaster):
     while True:
         for block in coaster:
             block.setStatus()
+        updatestring = str(time.time()) + ":"
         for block in coaster:
-            block.setBehavior()
+            #block.setBehavior()
+            updatestring += " " + block.name + ": " + block.status
+            block.moveTrain()
+        print(updatestring)
 
 
 class AbstractBlock:
