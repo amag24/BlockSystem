@@ -90,7 +90,7 @@ class AbstractBlock:
             #This really should never happen
             self.E_STOP()
             raise Warning(self.name + ": I was told to act but I am in an UNKNOWN state for some reason. Defaulting to holding behavior...")
-        if self.status in ("UNKNOWN","HOLDING","VACANT"):
+        if self.status in ("HOLDING","VACANT"):
             self.stopTrain()
         else: 
             self.moveTrain()

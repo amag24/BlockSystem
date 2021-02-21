@@ -15,9 +15,9 @@ def autoRun(coaster):
             block.setStatus()
         updatestring = str(time.time()) + ":"
         for block in coaster:
-            #block.setBehavior()
+            block.setBehavior()
             updatestring += " " + block.name + ": " + block.status
-            block.moveTrain()
+            #block.moveTrain()
         print(updatestring)
 
 
@@ -55,38 +55,42 @@ class AbstractBlock:
 
     def setStatus(self):
         try:
-            if self.sense(): #Look for the train. If we see something...
-                if self.status is "UNKNOWN": #When script starts, make sure all trains are seen by the sensor in their respective blocks
-                    self.status = "HOLDING"                    
-                elif self.status is "VACANT":
-                    self.E_STOP()
-                    raise RuntimeError(self.name + ": E-STOPPED because I saw a train when I was supposed to be VACANT")
-                else:
-                    if self.heir.status in ("VACANT","ENTERING"): 
-                        self.status = "DEPARTING"
-                        self.heir.handoff(True)
-                    else:
-                        if self.status is "DEPARTING":
-                            #Ensure that if a train is sensed by one block, it can't be sensed by the next. Otherwise it could lock up here.
-                            raise Warning(self.name + ": I'm stuck because the next block saw the train too early as I was trying to depart")
-                        self.status = "HOLDING"
-            else: #If we don't see a train anywhere...
-                if self.status is "UNKNOWN":
-                    self.status = "VACANT"
-                elif self.status is "HOLDING":
-                    self.E_STOP()
-                    raise RuntimeError(self.name + ":E-STOPPED because I lost sight of the train that I was supposed to be HOLDING")
-                elif self.status is "DEPARTING":
-                    self.status = "VACANT"
-                    self.heir.handoff(False)
+            test = self.heir.status
         except:
             raise RuntimeError(self.name + ": Failed while trying to get the status. Check if an heir has been assigned to this block.")
+
+        if self.sense(): #Look for the train. If we see something...
+            if self.status is "UNKNOWN": #When script starts, make sure all trains are seen by the sensor in their respective blocks
+                self.status = "HOLDING"                    
+            elif self.status is "VACANT":
+                self.E_STOP()
+                raise RuntimeError(self.name + ": E-STOPPED because I saw a train when I was supposed to be VACANT")
+            else:
+                if self.heir.status in ("VACANT","ENTERING"): 
+                    self.status = "DEPARTING"
+                    self.heir.handoff(True)
+                else:
+                    if self.status is "DEPARTING":
+                        #Ensure that if a train is sensed by one block, it can't be sensed by the next. Otherwise it could lock up here.
+                        self.E_STOP()
+                        raise Warning(self.name + ": I'm stuck because the next block saw the train too early as I was trying to depart")
+                    self.status = "HOLDING"
+        else: #If we don't see a train anywhere...
+            if self.status is "UNKNOWN":
+                self.status = "VACANT"
+            elif self.status is "HOLDING":
+                self.E_STOP()
+                raise RuntimeError(self.name + ":E-STOPPED because I lost sight of the train that I was supposed to be HOLDING")
+            elif self.status is "DEPARTING":
+                self.status = "VACANT"
+                self.heir.handoff(False)
     
     def setAction(self):
         if self.status is "UNKNOWN":
             #This really should never happen
+            self.E_STOP()
             raise Warning(self.name + ": I was told to act but I am in an UNKNOWN state for some reason. Defaulting to holding behavior...")
-        if self.status in ("UNKNOWN","HOLDING","VACANT"):
+        if self.status in ("HOLDING","VACANT"):
             self.stopTrain()
         else: 
             self.moveTrain()
