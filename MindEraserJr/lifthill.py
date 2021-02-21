@@ -8,7 +8,7 @@ import sys
 import logging
 from rpi_rf import RFDevice 
 
-from .lightsensor import getResistance
+from lightsensor import getResistance
 from BlockSystem import AbstractBlock
 
 #Setup RF Transmitter
@@ -26,7 +26,9 @@ class LiftHill(AbstractBlock):
         super().__init__(blockname)
         
     def sense(self):
-        return getResistance(mpin,tpin) < 40
+        res = getResistance(mpin,tpin)
+        #print(self.name + ": " + str(res))
+        return  res < 160
     def stopTrain(self):
         rfdevice.tx_code(70972, 1, 185)
     def moveTrain(self):

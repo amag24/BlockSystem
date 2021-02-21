@@ -1,8 +1,8 @@
 
 import BlockSystem
-from .station import Station
-from .lifthill import LiftHill
-from .finalbrake import FinalBrake
+from station import Station
+from lifthill import LiftHill
+from finalbrake import FinalBrake
 
 MindErasor2 = [FinalBrake(),LiftHill(),Station()]
 for block in range(len(MindErasor2)):

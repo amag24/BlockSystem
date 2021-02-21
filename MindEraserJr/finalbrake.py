@@ -5,7 +5,7 @@ import datetime as dt
 import time
 import RPi.GPIO as GPIO
 from adafruit_servokit import ServoKit
-from .lightsensor import getResistance
+from lightsensor import getResistance
 from BlockSystem import AbstractBlock
 
 #Setup Servo
@@ -15,7 +15,7 @@ kit = ServoKit(channels=16)
 kit.servo[0].set_pulse_width_range(600, 2400)
 
 #Setup Photoresistor 
-mpin=12
+mpin=6
 tpin=25
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(tpin, GPIO.OUT)
@@ -25,11 +25,13 @@ class FinalBrake(AbstractBlock):
         super().__init__(blockname)
 
     def sense(self):
-        return getResistance(mpin,tpin) < 155
+        res = getResistance(mpin,tpin)
+        #print(self.name + ": " + str(res))
+        return res < 180
     def stopTrain(self):
         kit.servo[0].angle = 135
     def moveTrain(self):
-        kit.servo[0].angle = 150
+        kit.servo[0].angle = 155
 
 
 

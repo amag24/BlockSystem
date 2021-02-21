@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import datetime as dt
 import time
 from adafruit_servokit import ServoKit
-from .lightsensor import getResistance
+from lightsensor import getResistance
 from BlockSystem import AbstractBlock
 
 #Setup Servo
@@ -24,7 +24,9 @@ class Station(AbstractBlock):
         super().__init__(blockname)
         
     def sense(self):
-        return getResistance(mpin,tpin) < 40
+        res = getResistance(mpin,tpin)
+        #print(self.name + ": " + str(res))
+        return res < 130
     def stopTrain(self):
         kit.continuous_servo[1].throttle = 0
     def moveTrain(self):
