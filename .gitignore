@@ -20,7 +20,7 @@ parts/
 sdist/
 var/
 wheels/
-vs/*
+.vs/
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
