@@ -14,8 +14,13 @@ ____________________________________________________________________________
 Things that I would like to support in the future (check back for updates!):
 ____________________________________________________________________________
 Multi-sensor blocks
+
 Station gates, lights, & other animatables
+
 Transfer/Trick Tracks
+
 Shuttle blocks (like swing launches)
+
 Manual Block/Full manual mode
+
 Control Panel React App
