@@ -5,7 +5,7 @@ Sensor::Sensor(int mpin, int tpin) : _mpin(mpin), _tpin(tpin)
     pinMode(_tpin, OUTPUT);
 }
 
-void Sensor::sense()
+float Sensor::sense()
 {
     pinMode(_mpin, OUTPUT);
     digitalWrite(_mpin, 0);
@@ -16,11 +16,12 @@ void Sensor::sense()
     digitalWrite(_tpin, 1);
     start = std::chrono::system_clock::now();
     end = std::chrono::system_clock::now();
-    while (digitalRead(mpin) == 0) end = std::chrono::system_clock::now();
-    std::cout << duration_cast<std::chrono::milliseconds>(end - start).count()<<std::endl;
+    int count = 0;
+    while (digitalRead(_mpin) == 0) {
+        end = std::chrono::system_clock::now();
+        count++;
+    }
+    return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 }
 
-float Sensor::statusDuration()
-{
-        return _time_since_switch;
-}
+
