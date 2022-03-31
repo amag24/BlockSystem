@@ -1,7 +1,7 @@
 #ifndef STATE_LIFT_ABORT_H
 #define STATE_LIFT_ABORT_H
 
-#include "include/statemachine/abstract_state.h"
+#include "statemachine/abstract_state.h"
 
 namespace Phoenix {
 

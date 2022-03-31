@@ -5,7 +5,7 @@ project(tests)
 
 include_directories(
     include
-    ../rc-switch
+    ${CMAKE_SOURCE_DIR}/rc-switch
 )
 
 

@@ -6,7 +6,7 @@ class Actuator {
 public:
     Actuator()
     {
-       this->stop(); 
+       this->stop();
     }
 
 public:
@@ -14,6 +14,10 @@ public:
     virtual void stop() const = 0;
     
     virtual void advance() const = 0;
+
+    virtual void reverse() const
+    {
+    }
 
 };
 

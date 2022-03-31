@@ -10,7 +10,9 @@ class BlockSection
 {
 
 public:
-    BlockSection(const std::vector<std::string> &watchedSensors);
+    BlockSection();
+    
+    ~BlockSection();
 
     friend void connectBlocks(std::shared_ptr<BlockSection> &origin, std::shared_ptr<BlockSection> &destination);
 
@@ -20,40 +22,29 @@ public:
 
     bool isMoving();
 
-public:
     const State* getState() const;
     
-
-    const std::vector<std::string>& getWatchedSensors();
-    
-
 private:
     void transitionStates(const Transition &desiredTransition);
 
 private:
     State* _state = nullptr;
-    const std::vector<std::string> _watchedSensors;
     std::shared_ptr<const BlockSection> _nextBlock;
     std::shared_ptr<const BlockSection> _previousBlock;
 
 };
 
 /////////////////////////Helper function to connect two adjacent blocks//////////////////////////
-inline void connectBlocks(std::shared_ptr<BlockSection> &origin, std::shared_ptr<BlockSection> &destination)
-{
-    origin->_nextBlock = std::const_pointer_cast<const BlockSection>(destination);
-    destination->_previousBlock = std::const_pointer_cast<const BlockSection>(origin);
-}
+inline void connectBlocks(std::shared_ptr<BlockSection> &origin, std::shared_ptr<BlockSection> &destination);
 
 //////////////Wrapper class to initialize a block into a particular state machine loop///////////////////
-template <class initialState>
+template <class InitialState>
 class Block : public BlockSection
 {
 public:
-    Block(const std::vector<std::string> &watchedSensors) : 
-        BlockSection(watchedSensors)
+    Block() 
     {
-        _state = new initialState();
+        _state = new InitialState();
         _state->onEnter();
     }
 };

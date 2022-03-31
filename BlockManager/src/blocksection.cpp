@@ -1,8 +1,15 @@
 #include "blocksection.h"
 
-BlockSection::BlockSection(const std::vector<std::string> &watchedSensors) : 
-    _watchedSensors(watchedSensors)
+BlockSection::BlockSection() : 
 {
+}
+
+BlockSection::~BlockSection(){
+	if(_state)
+	{
+		_state->onExit();
+		delete _state;
+	}
 }
 
 bool BlockSection::update(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, bool abortRequest, bool stopRequest)
@@ -36,11 +43,6 @@ const State* BlockSection::getState() const
 	return _state;
 }
 
-const std::vector<std::string>& BlockSection::getWatchedSensors()
-{
-	return _watchedSensors;
-} 
-
 void BlockSection::transitionStates(const Transition &desiredTransition)
 {
 	_state->onExit();
@@ -48,3 +50,10 @@ void BlockSection::transitionStates(const Transition &desiredTransition)
 	_state = desiredTransition.newState();
 	_state->onEnter();
 }
+
+inline void connectBlocks(std::shared_ptr<BlockSection> &origin, std::shared_ptr<BlockSection> &destination)
+{
+    origin->_nextBlock = std::const_pointer_cast<const BlockSection>(destination);
+    destination->_previousBlock = std::const_pointer_cast<const BlockSection>(origin);
+}
+

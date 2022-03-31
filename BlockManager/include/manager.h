@@ -4,8 +4,8 @@
 #include <vector>
 #include <unordered_map>
 #include <thread>
+#include <atomic>
 #include <iostream>
-#include <mutex>
 
 #include "blocksection.h"
 
@@ -27,19 +27,14 @@ public:
 
 
 private:
-    std::mutex& getMutex(const std::string& name);
-
-    void sense(const std::string &sensor_name);
+    void sense(const std::shared_ptr<Sensor> &sensor);
 
 private:
     std::unordered_map<std::string, std::shared_ptr<Sensor>> _sensors;
     std::vector<std::thread> _sensorThreads;
-    std::unordered_map<std::string, std::mutex> _sensorMutexes;
-    std::mutex mapMutex;
-
     std::vector<std::shared_ptr<BlockSection>> _blocks;
 
-    bool shutdown = false;
+    std::atomic<bool> shutdown = false;
     bool abortRequest = false;
     bool changeMode = false;
 };

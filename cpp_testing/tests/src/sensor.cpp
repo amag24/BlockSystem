@@ -16,12 +16,8 @@ float Sensor::sense()
     digitalWrite(_tpin, 1);
     start = std::chrono::system_clock::now();
     end = std::chrono::system_clock::now();
-    int count = 0;
-    while (digitalRead(_mpin) == 0) {
-        end = std::chrono::system_clock::now();
-        count++;
-    }
-    return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    while (!digitalRead(_mpin)) {}
+    return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now() - start).count();
 }
 
 

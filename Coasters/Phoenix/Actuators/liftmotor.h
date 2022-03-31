@@ -2,7 +2,7 @@
 #define LIFT_MOTOR_H
 
 #include <RCSwitch.h>
-#include "include/actuator.h"
+#include "actuator.h"
 
 
 class LiftMotor :  public Actuator 
@@ -21,12 +21,12 @@ public:
     
     void stop() const override
     {
-        m_transmitter.send(70972, 17);
+        m_transmitter.send(70972, 24);
     }
     
     void advance() const override
     {
-        m_transmitter.send(70963, 17);
+        m_transmitter.send(70963, 24);
     }
 
 private:

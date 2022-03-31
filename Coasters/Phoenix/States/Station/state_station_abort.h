@@ -1,7 +1,7 @@
 #ifndef STATE_STATION_ABORT_H
 #define STATE_STATION_ABORT_H
 
-#include "include/statemachine/abstract_state.h"
+#include "statemachine/abstract_state.h"
 
 namespace Phoenix {
 

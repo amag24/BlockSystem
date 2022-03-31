@@ -6,7 +6,7 @@ Manager::Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> 
 	{
 		_sensorThreads.push_back(
 			std::thread(
-				[&]{ this->sense(sensor_it->first); }
+				[&]{ this->sense(sensor_it->second); }
 			)
 		);
 	}
@@ -44,25 +44,13 @@ void Manager::auto_block()
 		motion = false;
 		for (auto block : _blocks)
 		{
-			// Fetch the sensors and mutexes relevant to this block only.
-			std::unordered_map<std::string, std::shared_ptr<Sensor>> sensors;
-			for (auto sensorname : block->getWatchedSensors())
-			{
-				getMutex(sensorname).lock();
-				sensors[sensorname] = _sensors[sensorname];
-			}
 			// Give the block our current state. Block will set state accordingly and then act
 			// When it is finished updating, it will report back if it has seen anything worthy of an abort.
-			if (block->update(sensors, abortRequest, changeMode))
+			if (block->update(_sensors, abortRequest, changeMode))
 				abortRequest = true;
 			// Check if this block is stationary
 			if (block->isMoving())
 				motion = true;
-			// Release the sensor mutexes for this block
-			for (auto sensorname : block->getWatchedSensors())
-			{
-				getMutex(sensorname).unlock();
-			}
 		}
 	}
 	if (abortRequest)
@@ -79,16 +67,9 @@ void Manager::full_manual()
 
 }
 
-std::mutex& Manager::getMutex(const std::string& name)
-{
-	std::lock_guard<std::mutex> m_lock(mapMutex);
-	return _sensorMutexes[name];
-}
-
-void Manager::sense(const std::string &sensor_name)
+void Manager::sense(const std::shared_ptr<Sensor> &sensor)
 {
 	while (!shutdown){
-		std::lock_guard<std::mutex> s_lock(getMutex(sensor_name));
-		_sensors[sensor_name]->sense();
+		sensor->sense();
 	}
 }
