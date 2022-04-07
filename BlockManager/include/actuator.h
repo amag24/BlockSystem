@@ -9,6 +9,10 @@ public:
        this->stop();
     }
 
+    virtual ~Actuator()
+    {
+    }
+
 public:
     
     virtual void stop() const = 0;

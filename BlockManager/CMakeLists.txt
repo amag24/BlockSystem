@@ -4,6 +4,7 @@ project(BlockManager)
 
 include_directories(
     include
+    include/statemachine
 )
 
 

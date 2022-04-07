@@ -25,9 +25,9 @@ public:
 private:
     std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
     std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-    std::atomic<std::chrono::system_clock::time_point> last_change = std::chrono::system_clock::now();
+    std::atomic<std::chrono::system_clock::time_point> last_change;
 
-    std::atomic<bool> _detected = false;
+    std::atomic<bool> _detected;
     
     const float _threshold;
     const int _mpin;

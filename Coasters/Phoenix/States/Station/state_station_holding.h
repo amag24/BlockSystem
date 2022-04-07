@@ -22,8 +22,8 @@ public:
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
-        const State* previous = nullptr, 
-        const State* next = nullptr
+        const std::shared_ptr<const State> previous, 
+        const std::shared_ptr<const State> next
         ) const
     {
         if (abort || !*sensors.at("station"))
@@ -39,9 +39,9 @@ public:
     }
 
 public:
-   void act()
+   void act(const std::shared_ptr<Actuator> &actuator)
    {
-       //stop train
+       actuator->stop();
    }
 
    bool is_moving() const 

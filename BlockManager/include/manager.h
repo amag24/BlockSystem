@@ -34,7 +34,7 @@ private:
     std::vector<std::thread> _sensorThreads;
     std::vector<std::shared_ptr<BlockSection>> _blocks;
 
-    std::atomic<bool> shutdown = false;
+    std::atomic<bool> shutdown;
     bool abortRequest = false;
     bool changeMode = false;
 };

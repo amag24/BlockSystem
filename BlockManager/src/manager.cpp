@@ -1,6 +1,6 @@
 #include "manager.h"
 
-Manager::Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, const std::vector<std::shared_ptr<BlockSection>> &blocks) : _sensors(sensors), _blocks(blocks)
+Manager::Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, const std::vector<std::shared_ptr<BlockSection>> &blocks) : _sensors(sensors), _blocks(blocks), shutdown(false)
 {
 	for (auto sensor_it = _sensors.begin(); sensor_it != _sensors.end(); sensor_it++)
 	{

@@ -1,6 +1,6 @@
 #include "sensor.h"
 
-Sensor::Sensor(int mpin, int tpin, float threshold) : _mpin(mpin), _tpin(tpin), _threshold(threshold)
+Sensor::Sensor(int mpin, int tpin, float threshold) : _mpin(mpin), _tpin(tpin), _threshold(threshold), _detected(false), last_change(std::chrono::system_clock::now())
 {
     pinMode(_tpin, OUTPUT);
 }

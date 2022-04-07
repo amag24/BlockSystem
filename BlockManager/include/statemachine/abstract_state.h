@@ -6,8 +6,8 @@
 #include <memory>
 
 #include "transition.h"
-#include "include/sensor.h"
-#include "include/actuator.h"
+#include "sensor.h"
+#include "actuator.h"
 
 
 class State
@@ -15,6 +15,10 @@ class State
 
 public:
     State()
+    {
+    }
+
+    virtual ~State()
     {
     }
 
@@ -31,17 +35,17 @@ public:
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
-        const State* previous = nullptr, 
-        const State* next = nullptr
+        const std::shared_ptr<const State> previous, 
+        const std::shared_ptr<const State> next
         ) const
     {
         return Transition();
     }
 
 public:
-   virtual void act()
+   virtual void act(const std::shared_ptr<Actuator> &actuator)
    {
-
+       actuator->stop();
    }
 
    virtual bool occupied() const = 0; 

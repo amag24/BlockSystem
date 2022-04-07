@@ -11,6 +11,10 @@ public:
     {
     }
 
+    virtual ~Transition()
+    {
+    }
+    
 public:
     virtual State* newState() const
     {
