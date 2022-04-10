@@ -1,6 +1,6 @@
 #include "manager.h"
 
-Manager::Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, const std::vector<std::shared_ptr<BlockSection>> &blocks) : _sensors(sensors), _blocks(blocks), shutdown(false)
+Manager::Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, const std::unordered_map<std::string, std::shared_ptr<BlockSection>> &blocks) : _sensors(sensors), _blocks(blocks), shutdown(false)
 {
 	for (auto sensor_it = _sensors.begin(); sensor_it != _sensors.end(); sensor_it++)
 	{
@@ -13,6 +13,14 @@ Manager::Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> 
 	// setup listener and sender threads
 }
 
+Manager::~Manager()
+{
+	for (auto sensor = _sensorThreads.begin(); sensor != _sensorThreads.end(); sensor++)
+	{
+		sensor->join();
+	}
+}
+
 void Manager::run()
 {
 	while (!shutdown)
@@ -22,12 +30,9 @@ void Manager::run()
 		if (command == "auto")
 		{
 			auto_block();
-		} // conditions for other modes
-	}
-
-	for (auto sensor = _sensorThreads.begin(); sensor != _sensorThreads.end(); sensor++)
-	{
-		sensor->join();
+		} else if(comand == "shutdown"){
+			shutdown = true;
+		}
 	}
 }
 
@@ -46,10 +51,10 @@ void Manager::auto_block()
 		{
 			// Give the block our current state. Block will set state accordingly and then act
 			// When it is finished updating, it will report back if it has seen anything worthy of an abort.
-			if (block->update(_sensors, abortRequest, changeMode))
+			if (block.second->update(_sensors, abortRequest, changeMode))
 				abortRequest = true;
 			// Check if this block is stationary
-			if (block->isMoving())
+			if (block.second->isMoving())
 				motion = true;
 		}
 	}

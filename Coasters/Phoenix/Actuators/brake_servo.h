@@ -9,7 +9,8 @@ class BrakeServo :  public Actuator
 {
 
 public:
-    BrakeServo(const int &pin, const int &hz = 50): Actuator(), _pin(pin), _hz(hz)
+    BrakeServo(const int &pin, const int &hz = 50, const int &pin_base = 300, const int &max_pwm = 4096): 
+    Actuator(), _pin(pin), _hz(hz), _pin_base(pin_base), _max_pwm(max_pwm)
     {
     }
 
@@ -34,8 +35,8 @@ private:
 private:
     const int _pin;
     const int _hz;
-    const int _pin_base = 300;
-    const int _max_pwm = 4096;
+    const int _pin_base;
+    const int _max_pwm;
 };
 
 #endif //BRAKE_SERVO_H

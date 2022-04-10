@@ -1,15 +1,15 @@
-#ifndef LIFT_MOTOR_H
-#define LIFT_MOTOR_H
+#ifndef LIFT_TRANSMITTER_H
+#define LIFT_TRANSMITTER_H
 
 #include <RCSwitch.h>
 #include "actuator.h"
 
 
-class LiftMotor :  public Actuator 
+class LiftTransmitter :  public Actuator 
 {
 
 public:
-    LiftMotor(const int &pin): Actuator(), m_transmitter()
+    LiftTransmitter(const int &pin): Actuator(), m_transmitter()
     {
         m_transmitter.enableTransmit(pin);
         m_transmitter.setProtocol(1);
@@ -33,4 +33,4 @@ private:
     RCSwitch m_transmitter;
 };
 
-#endif //LIFT_MOTOR_H
+#endif //LIFT_TRANSMITTER_H

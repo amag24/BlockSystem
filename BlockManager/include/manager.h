@@ -13,9 +13,10 @@ class Manager
 {
 
 public:
-    Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, const std::vector<std::shared_ptr<BlockSection>> &blocks);  
+    Manager(const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, const std::unordered_map<std::string, std::shared_ptr<BlockSection>> &blocks);  
     
-
+    ~Manager();
+    
 public:
     void run();
 
@@ -32,7 +33,7 @@ private:
 private:
     std::unordered_map<std::string, std::shared_ptr<Sensor>> _sensors;
     std::vector<std::thread> _sensorThreads;
-    std::vector<std::shared_ptr<BlockSection>> _blocks;
+    std::unordered_map<std::string, std::shared_ptr<BlockSection>> _blocks;
 
     std::atomic<bool> shutdown;
     bool abortRequest = false;
