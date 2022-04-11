@@ -9,7 +9,7 @@ namespace Phoenix
 namespace Brake
 {
 
-class Vacant;
+class Leaving;
 class Abort;
 class Holding;
 
@@ -20,8 +20,14 @@ public:
     Departing()
     {
     }
+    
+    void onEnter()
+    {
+        std::cout << "Brake Departing" << std::endl;
+    }
+    
 
-    Transition getTransition(
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors,
         const bool abort,
         const bool stop,
@@ -30,18 +36,18 @@ public:
     {
         if (abort || (next && next->occupied()))
         {
-            return TransitionTo<Abort>();
+            return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
         else if (stop)
         {
-            return TransitionTo<Holding>();
+            return std::unique_ptr<Transition>(new TransitionTo<Holding>());
         }
         else if (!*sensors.at("brake"))
         {
-            return TransitionTo<Vacant>();
+            return std::unique_ptr<Transition>(new TransitionTo<Leaving>());
         }
 
-        return Transition();
+        return std::make_unique<Transition>();
     }
 
 public:

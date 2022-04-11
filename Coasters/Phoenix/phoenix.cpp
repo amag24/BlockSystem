@@ -25,10 +25,10 @@ int main(void)
 
     //INITIALIZE SENSORS
     std::unordered_map<std::string, std::shared_ptr<Sensor>> sensors;
-    sensors["brake"] = std::make_shared<Sensor>(28,5);
-    sensors["unload"] = std::make_shared<Sensor>(27,2);
-    sensors["station"] = std::make_shared<Sensor>(22,1);
-    sensors["lift"] = std::make_shared<Sensor>(29,6);
+    sensors["brake"] = std::make_shared<Sensor>(28,5, 18);
+    sensors["unload"] = std::make_shared<Sensor>(27,2,14.0);
+    sensors["station"] = std::make_shared<Sensor>(22,1,16.0);
+    sensors["lift"] = std::make_shared<Sensor>(29,6,15.0);
 
     //INITIALIZE ACTUATORS
     std::shared_ptr<Actuator> final_brake(new BrakeServo(0, HERTZ, PIN_BASE, MAX_PWM));
@@ -44,10 +44,10 @@ int main(void)
     blocks["Lift"] = std::shared_ptr<BlockSection>(new Block<Phoenix::Lift::Initialize>(lift_transmitter));
 
     //CONNECT BLOCKS
-    connectBlocks(block.at("Gravity"), blocks.at("Unload"));
-    connectBlocks(block.at("Unload"), blocks.at("Station"));
-    connectBlocks(block.at("Station"), blocks.at("Lift"));
-    connectBlocks(block.at("Lift"), blocks.at("Gravity"));
+    connectBlocks(blocks.at("Gravity"), blocks.at("Unload"));
+    connectBlocks(blocks.at("Unload"), blocks.at("Station"));
+    connectBlocks(blocks.at("Station"), blocks.at("Lift"));
+    connectBlocks(blocks.at("Lift"), blocks.at("Gravity"));
 
     Manager phoenix(sensors, blocks);
     phoenix.run();

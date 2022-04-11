@@ -20,8 +20,13 @@ public:
     Departing()
     {
     }
+    
+    void onEnter()
+    {
+        std::cout << "Lift Departing" << std::endl;
+    }
 
-    Transition getTransition(
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors,
         const bool abort,
         const bool stop,
@@ -30,18 +35,18 @@ public:
     {
         if (abort || (next && next->occupied()))
         {
-            return TransitionTo<Abort>();
+            return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
         else if (stop)
         {
-            return TransitionTo<Holding>();
+            return std::unique_ptr<Transition>(new TransitionTo<Holding>());
         }
-        else if (!*sensors.at("lift") && sensors.at("lift")->statusDuration() > 1.5)
+        else if (!*sensors.at("lift") && sensors.at("lift")->statusDuration() > 1000)
         {
-            return TransitionTo<Vacant>();
+            return std::unique_ptr<Transition>(new TransitionTo<Vacant>());
         }
 
-        return Transition();
+        return std::make_unique<Transition>();
     }
 
 public:

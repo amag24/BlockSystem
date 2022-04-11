@@ -9,6 +9,7 @@
 #include "state_brake_initialize.h"
 #include "state_brake_occupied.h"
 #include "state_brake_vacant.h"
+#include "state_brake_leaving.h"
 
 
 #endif // BRAKE_STATES_H

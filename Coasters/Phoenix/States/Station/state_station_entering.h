@@ -16,8 +16,13 @@ public:
     Entering()
     {
     }
+    
+    void onEnter() override
+    {
+        std::cout << "Station Entering" << std::endl;
+    }
  
-    Transition getTransition(
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
@@ -26,20 +31,21 @@ public:
         ) const override
     {
 
-        if(abort || *sensors.at("station"))
+        if(abort || (*sensors.at("station") && previous->departing()))
         {
-            return TransitionTo<Abort>(); // we should not see the train if previous block does too
+            if (!abort) std::cout << "Station throwing abort" << std::endl;
+            return std::unique_ptr<Transition>(new TransitionTo<Abort>()); // we should not see the train if previous block does too
         }
         else if (stop)
         {
-            return TransitionTo<Vacant>();
+            return std::unique_ptr<Transition>(new TransitionTo<Vacant>());
         } 
         else if (!previous->departing())
         {
-            return TransitionTo<Approaching>();
+            return std::unique_ptr<Transition>(new TransitionTo<Approaching>());
         }
         
-        return Transition();
+        return std::make_unique<Transition>();
     }
 
 public:

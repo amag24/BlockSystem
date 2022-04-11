@@ -1,28 +1,29 @@
-#ifndef STATE_UNLOAD_HOLDING_H
-#define STATE_UNLOAD_HOLDING_H
+#ifndef STATE_BRAKE_LEAVING_H
+#define STATE_BRAKE_LEAVING_H
 
-#include "state_unload_occupied.h"
+#include "state_brake_occupied.h"
 
 namespace Phoenix {
 
-namespace Unload {
+namespace Brake {
 
 class Abort;
-class Departing;
+class Vacant;
 
-class Holding : public Occupied
+class Leaving : public Occupied
 {
 
 public:
-    Holding()
+    Leaving()
     {
     }
     
     void onEnter()
     {
-        std::cout << "Unload Holding" << std::endl;
+        std::cout << "Brake Leaving" << std::endl;
     }
     
+ 
     std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
@@ -31,33 +32,32 @@ public:
         const std::shared_ptr<const State> next
         ) const
     {
-        if (abort || !*sensors.at("unload"))
-        {
+        if(abort || *sensors.at("brake")){
             return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
-        else if (next && !next->occupied() && !stop)
+        //Check if next block has accepted the train
+        if (next and next->occupied() and (next->departing() || !next->is_moving()))
         {
-            return std::unique_ptr<Transition>(new TransitionTo<Departing>());
+            return std::unique_ptr<Transition>(new TransitionTo<Vacant>());
         }
-
         return std::make_unique<Transition>();
     }
 
 public:
    void act(const std::shared_ptr<Actuator> &actuator)
    {
-       actuator->stop();
+       actuator->advance();
    }
 
-   bool is_moving() const 
+   bool is_moving() const
    {
-       return false;
+       return true;
    }
 
 };
 
-} // Unload
+} // Brake
 
 } // Phoenix
 
-#endif // STATE_UNLOAD_HOLDING_H
+#endif // STATE_BRAKE_LEAVING_H

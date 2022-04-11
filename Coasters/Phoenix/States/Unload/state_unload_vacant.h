@@ -18,10 +18,15 @@ public:
     Vacant()
     {
     }
+    
+    void onEnter()
+    {
+        std::cout << "Unload Vacant" << std::endl;
+    }
 
 public:
     
-    Transition getTransition(
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
@@ -31,14 +36,14 @@ public:
     {
         if(abort || *sensors.at("unload"))
         {
-            return TransitionTo<Abort>();
+            return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         } 
         else if (previous && previous->departing() && !abort && !stop)
         {
-            return TransitionTo<Entering>();
+            return std::unique_ptr<Transition>(new TransitionTo<Entering>());
         }
 
-        return Transition();
+        return std::make_unique<Transition>();
 
     }
 

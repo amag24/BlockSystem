@@ -4,7 +4,8 @@
 #include <wiringPi.h>
 #include <chrono>
 #include <atomic>
-
+#include <deque>
+#include <iostream>
 class Sensor
 {
 
@@ -13,20 +14,25 @@ public:
 
 public:
     void sense();
-
-    float statusDuration() const;
     
+    void printReport();
+    
+    float statusDuration() const;
 
     explicit operator bool() const
     {
         return _detected.load();
     }
-
+    
 private:
-    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-    std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-    std::atomic<std::chrono::system_clock::time_point> last_change;
-
+    void addReading(const float &reading);
+    
+private:
+    std::chrono::system_clock::time_point _start = std::chrono::system_clock::now();
+    std::chrono::system_clock::time_point _end = std::chrono::system_clock::now();
+    std::atomic<std::chrono::system_clock::time_point> _last_change;
+    
+    std::deque<float> _sensor_readings;
     std::atomic<bool> _detected;
     
     const float _threshold;

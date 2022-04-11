@@ -1,6 +1,6 @@
 #ifndef TRANSITION_H
 #define TRANSITION_H
-
+#include <iostream>
 class State;
 
 class Transition
@@ -23,6 +23,7 @@ public:
 
     virtual explicit operator bool() const
     {
+        //~ std::cout << "Not Available"<<std::endl;
         return false;
     }
     
@@ -38,12 +39,12 @@ public:
     }
 
 public:
-    virtual State* newState() const override
+    State* newState() const override
     {
         return new DesiredState();
     }
 
-    virtual explicit operator bool() const override
+    explicit operator bool() const override
     {
         return true;
     }

@@ -16,18 +16,23 @@ public:
 
 public:
     
-    void stop() const override
+    void stop() override
     {
-        pwmWrite(_pin_base + _pin), calcTicks(1.5));
+        pwmWrite(_pin_base + _pin, calcTicks(1.5));
     }
     
-    void advance() const override
+    void advance() override
     {
-        pwmWrite(_pin_base + _pin), calcTicks(1.1));
+        pwmWrite(_pin_base + _pin, calcTicks(1.1));
+    }
+    
+    void reverse() override
+    {
+        pwmWrite(_pin_base + _pin, calcTicks(1.9));
     }
 private:
     //Calculate the number of ticks the signal should be high for the required amount of time
-    int calcTicks(float impulseMs)
+    int calcTicks(float impulseMs) const
     {
         return (int)(_max_pwm * _hz *impulseMs/1000 + 0.5f);
     }

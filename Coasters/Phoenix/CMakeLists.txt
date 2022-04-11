@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
-set(CMAKE_CXX_FLAGS "-DRPI")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DRPI -pthread")
+set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -latomic")
+
 project(tests)
 
 
@@ -20,4 +22,5 @@ target_link_libraries(phoenix
     ${WIRINGPI_LIBRARIES}
     ${SERVO_LIBRARIES}
     rc-switch
+    BlockManager
 )

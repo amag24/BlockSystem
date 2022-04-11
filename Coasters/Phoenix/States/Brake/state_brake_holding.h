@@ -18,7 +18,13 @@ public:
     {
     }
     
-    Transition getTransition(
+    void onEnter()
+    {
+        std::cout << "Brake Holding" << std::endl;
+    }
+    
+    
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
@@ -28,14 +34,14 @@ public:
     {
         if (abort || !*sensors.at("brake"))
         {
-            return TransitionTo<Abort>();
+            return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
         else if (next && !next->occupied() && !stop)
         {
-            return TransitionTo<Departing>();
+            return std::unique_ptr<Transition>(new TransitionTo<Departing>());
         }
 
-        return Transition();
+        return std::make_unique<Transition>();
     }
 
 public:

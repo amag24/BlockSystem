@@ -4,6 +4,7 @@
 #include <functional>
 #include <unordered_map>
 #include <memory>
+#include <iostream>
 
 #include "transition.h"
 #include "sensor.h"
@@ -31,7 +32,7 @@ public:
     {
     }
     
-    virtual Transition getTransition(
+    virtual std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
@@ -39,7 +40,7 @@ public:
         const std::shared_ptr<const State> next
         ) const
     {
-        return Transition();
+        return std::make_unique<Transition>();
     }
 
 public:

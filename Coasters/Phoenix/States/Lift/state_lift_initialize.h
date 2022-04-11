@@ -16,7 +16,12 @@ class Initialize : public State
 
 public:
     
-    virtual Transition getTransition(
+    
+    void onEnter()
+    {
+        std::cout << "Lift Initialize" << std::endl;
+    }
+    virtual std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
@@ -28,20 +33,20 @@ public:
         {
             if(*sensors.at("lift"))
             {
-                return TransitionTo<Holding>();
+                return std::unique_ptr<Transition>(new TransitionTo<Holding>());
             } else {
-                return TransitionTo<Vacant>();
+                return std::unique_ptr<Transition>(new TransitionTo<Vacant>());
             }
-        } catch(std::out_of_range)
+        } catch(std::out_of_range &oor)
         {
-            return Transition();
+            return std::make_unique<Transition>();
         }
 
     }
 
 public:
 
-   bool occupied()
+   bool occupied() const
    {
        return true;
    } 

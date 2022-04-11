@@ -18,8 +18,14 @@ public:
     Approaching()
     {
     }
+    
+    void onEnter()
+    {
+        std::cout << "Brake Approaching" << std::endl;
+    }
+    
  
-    Transition getTransition(
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors, 
         const bool abort,
         const bool stop,
@@ -28,20 +34,20 @@ public:
         ) const
     {
         if(abort){
-            return TransitionTo<Abort>();
+            return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
         else if(*sensors.at("brake"))
         {
             if (next and next->occupied())
             {
-                return TransitionTo<Holding>();
+                return std::unique_ptr<Transition>(new TransitionTo<Holding>());
             }
             else if (next and !next->occupied())
             {
-                return TransitionTo<Departing>();
+                return std::unique_ptr<Transition>(new TransitionTo<Departing>());
             }
         }
-        return Transition();
+        return std::make_unique<Transition>();
     }
 
 public:

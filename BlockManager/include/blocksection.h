@@ -3,14 +3,14 @@
 
 #include <vector>
 
-#include "abstract_state.h"
+#include "statemachine/abstract_state.h"
 
 /////////////////////////Primary block section class, owns a state machine//////////////////////////
 class BlockSection
 {
 
 public:
-    BlockSection(const std::shared_ptr<Actuator> &actuator);
+    BlockSection(const std::shared_ptr<State> &initial_state, const std::shared_ptr<Actuator> &actuator);
     
     virtual ~BlockSection();
 
@@ -25,9 +25,9 @@ public:
     const std::shared_ptr<const State> getState() const;
     
 private:
-    void transitionStates(const Transition &desiredTransition);
+    void transitionStates(const std::unique_ptr<Transition> &desiredTransition);
 
-private:
+protected:
     std::shared_ptr<State> _state;
     std::shared_ptr<Actuator> _actuator;
     std::shared_ptr<const BlockSection> _nextBlock;
@@ -47,7 +47,7 @@ template <class InitialState>
 class Block : public BlockSection
 {
 public:
-    Block(const std::shared_ptr<Actuator> &actuator): BlockSection(actuator), _state(new InitialState())
+    Block(const std::shared_ptr<Actuator> &actuator): BlockSection(std::shared_ptr<State>(new InitialState()), actuator)
     {
         _state->onEnter();
     }

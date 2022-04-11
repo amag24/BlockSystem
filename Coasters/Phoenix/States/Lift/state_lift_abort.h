@@ -14,21 +14,27 @@ public:
     Abort()
     {
     }
-
+    
+    void onEnter()
+    {
+        std::cout << "Lift Abort" << std::endl;
+    }
+    
 public:
-    Transition getTransition(
+    std::unique_ptr<Transition> getTransition(
         const std::unordered_map<std::string, std::shared_ptr<Sensor>> &sensors,
         const bool abort,
         const bool stop,
         const std::shared_ptr<const State> previous,
         const std::shared_ptr<const State> next) const
     {
-        return Transition(); //locked here until finished
+        return std::make_unique<Transition>(); //locked here until finished
     }
 
 public:
     void act(const std::shared_ptr<Actuator> &actuator)
     {
+        std::cout << "Lift sending signal to stop" << std::endl;
         actuator->stop();
     }
 

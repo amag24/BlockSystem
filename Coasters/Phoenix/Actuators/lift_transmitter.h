@@ -14,17 +14,17 @@ public:
         m_transmitter.enableTransmit(pin);
         m_transmitter.setProtocol(1);
         m_transmitter.setPulseLength(185);
-        m_transmitter.setRepeatTransmit(3);
+        m_transmitter.setRepeatTransmit(10);
     }
 
 public:
     
-    void stop() const override
+    void stop() override
     {
         m_transmitter.send(70972, 24);
     }
     
-    void advance() const override
+    void advance() override
     {
         m_transmitter.send(70963, 24);
     }
