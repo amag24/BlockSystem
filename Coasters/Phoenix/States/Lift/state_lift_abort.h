@@ -34,7 +34,6 @@ public:
 public:
     void act(const std::shared_ptr<Actuator> &actuator)
     {
-        std::cout << "Lift sending signal to stop" << std::endl;
         actuator->stop();
     }
 

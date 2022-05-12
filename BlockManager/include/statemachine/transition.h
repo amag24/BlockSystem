@@ -23,7 +23,6 @@ public:
 
     virtual explicit operator bool() const
     {
-        //~ std::cout << "Not Available"<<std::endl;
         return false;
     }
     

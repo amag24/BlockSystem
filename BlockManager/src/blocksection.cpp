@@ -22,11 +22,6 @@ bool BlockSection::update(const std::unordered_map<std::string, std::shared_ptr<
 		if (*desiredTransition)
 			transitionStates(desiredTransition);
 		_state->act(_actuator);
-		//~ if (_state->shouldAbort()){
-			//~ _state->act(_actuator);
-			//~ _state->act(_actuator);
-			//~ _state->act(_actuator);
-		//~ }
 		return _state->shouldAbort();
 	} else {
 		return true;

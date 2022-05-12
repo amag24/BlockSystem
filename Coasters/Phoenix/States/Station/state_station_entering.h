@@ -33,7 +33,6 @@ public:
 
         if(abort || (*sensors.at("station") && previous->departing()))
         {
-            if (!abort) std::cout << "Station throwing abort" << std::endl;
             return std::unique_ptr<Transition>(new TransitionTo<Abort>()); // we should not see the train if previous block does too
         }
         else if (stop)

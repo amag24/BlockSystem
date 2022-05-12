@@ -20,6 +20,8 @@ public:
 public:
     void run();
 
+    void operate();
+
     void auto_block();
 
     void manual_block();//run manual block listener and sender threads
@@ -36,8 +38,9 @@ private:
     std::unordered_map<std::string, std::shared_ptr<BlockSection>> _blocks;
     std::vector<std::shared_ptr<std::atomic<int>>> counts;
     std::atomic<bool> shutdown;
-    bool abortRequest = false;
-    bool changeMode = false;
+    std::atomic<bool> abortRequest;
+    std::atomic<bool> changeMode;
+    std::atomic<std::string> lastcommand;
 };
 
 #endif // MANAGER_H

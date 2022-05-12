@@ -36,7 +36,6 @@ public:
     {
         if(abort || *sensors.at("lift"))
         {
-            if (!abort) std::cout << "Lift throwing abort" << std::endl;
             return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         } 
         else if (previous && previous->departing() && !abort && !stop)

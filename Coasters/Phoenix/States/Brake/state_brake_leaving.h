@@ -36,7 +36,7 @@ public:
             return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
         //Check if next block has accepted the train
-        if (next and next->occupied() and (next->departing() || !next->is_moving()))
+        if (next && next->occupied() && (next->departing() || !next->is_moving()))
         {
             return std::unique_ptr<Transition>(new TransitionTo<Vacant>());
         }

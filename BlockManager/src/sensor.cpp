@@ -32,7 +32,8 @@ void Sensor::addReading(const float &reading)
     } else {
         _sensor_readings.push_back(reading);
         if (_sensor_readings.size() > 7) _sensor_readings.pop_front();
-        int high=0, low = 0;
+
+        int high=0, low=0;
         for (auto& read : _sensor_readings){
             if (read > _threshold){
                 high++;
@@ -40,9 +41,8 @@ void Sensor::addReading(const float &reading)
                 low++;
             }
         }
-        bool new_detection = ( high > low);
-        //~ std::cout <<"Threshold " << _threshold<< " reading "<<reading<<" size "<<_sensor_readings.size()<<" detection "<<new_detection<<high<<low<<std::endl;
-
+        
+        bool new_detection = (high > low);
         if (new_detection != _detected) {_last_change = _end;}
         _detected = new_detection;
     }

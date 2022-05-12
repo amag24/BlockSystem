@@ -33,16 +33,15 @@ public:
         ) const
     {
         if(abort){
-            sensors.at("unload")->printReport();
             return std::unique_ptr<Transition>(new TransitionTo<Abort>());
         }
         else if(*sensors.at("lift"))
         {
-            if (next and next->occupied())
+            if ((next && next->occupied()) || stop)
             {
                 return std::unique_ptr<Transition>(new TransitionTo<Holding>());
             }
-            else if (next and !next->occupied())
+            else if (next && !next->occupied())
             {
                 return std::unique_ptr<Transition>(new TransitionTo<Departing>());
             }

@@ -33,16 +33,13 @@ public:
         const std::shared_ptr<const State> next
         ) const
     {
-        if(abort){
-            return std::unique_ptr<Transition>(new TransitionTo<Abort>());
-        }
-        else if(*sensors.at("brake"))
+        if(*sensors.at("brake"))
         {
-            if (next and next->occupied())
+            if ((next && next->occupied()) || (abort || stop))
             {
                 return std::unique_ptr<Transition>(new TransitionTo<Holding>());
             }
-            else if (next and !next->occupied())
+            else if (next && !next->occupied())
             {
                 return std::unique_ptr<Transition>(new TransitionTo<Departing>());
             }
